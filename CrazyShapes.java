@@ -1,7 +1,10 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.event.*;
+
 import java.util.Random;
 
 /**
@@ -40,7 +43,7 @@ public class CrazyShapes extends MouseAdapter implements Runnable {
 
         while(i < shapes.size()){
             AnimatedShape s = shapes.get(i);
-            
+
             if(s.done()){
                 shapes.remove(i);
             } else {
@@ -63,7 +66,7 @@ public class CrazyShapes extends MouseAdapter implements Runnable {
         // create a JFrame in which we will build our very
         // tiny GUI, and give the window a name
         JFrame frame = new JFrame("AnimatedScribbles");
-        frame.setPreferredSize(new Dimension(800,800));
+        frame.setPreferredSize(new Dimension(1200, 1200));
 
         // tell the JFrame that when someone closes the
         // window, the application should terminate
@@ -73,10 +76,10 @@ public class CrazyShapes extends MouseAdapter implements Runnable {
         clear = new JCheckBox("Clear");
         clear.setEnabled(true);
 
-        drawingPanel = new JPanel();
+        panel = new JPanel(new BorderLayout());
 
         // JPanel with a paintComponent method
-        panel = new JPanel(new BorderLayout()) {
+        drawingPanel = new JPanel() {
             @Override
             public void paintComponent(Graphics g) {
 
@@ -98,6 +101,8 @@ public class CrazyShapes extends MouseAdapter implements Runnable {
 
         panel.addMouseListener(this);
         panel.addMouseMotionListener(this);
+        drawingPanel.addMouseListener(this);
+        drawingPanel.addMouseMotionListener(this);
 
         // display the window we've created
         frame.pack();
@@ -109,6 +114,17 @@ public class CrazyShapes extends MouseAdapter implements Runnable {
         // Random r = new Random();
         // temp = 0; r.nextInt(5);
         lastMouse = e.getPoint();
+
+        Point p[] = new Point[1];
+        p[0] = lastMouse;
+
+        if(temp == 0){
+            AnimatedShape shape = new VanishingCircle(p[0], drawingPanel);
+            shapes.add(shape);
+            shape.start();
+        }
+
+        drawingPanel.repaint();
     }
 
     // @Override
@@ -128,29 +144,22 @@ public class CrazyShapes extends MouseAdapter implements Runnable {
     // panel.repaint();
     // }
 
-    @Override
-    public void mouseReleased(MouseEvent e){
-        Point p[] = new Point[1];
-        p[0] = lastMouse;
-
-        if(temp == 0){
-            AnimatedShape shape = new VanishingCircle(p[0], panel);
-            shapes.add(shape);
-            shape.start();
-        }
-
-        panel.repaint();
-    }
 
     @Override
     public void mouseExited(MouseEvent e) {
         if(clear.isSelected()){
             shapes.clear();
-            panel.repaint();
+            drawingPanel.repaint();
         }
     }
 
     public static void main(String args[]) {
+
+        // create the snowflake image that will be used by the
+        // FallingSnow objects
+        VanishingCircle.loadCirclePic();
+        
+
         javax.swing.SwingUtilities.invokeLater(new CrazyShapes());
     }
 }

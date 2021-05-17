@@ -7,12 +7,12 @@ import javax.swing.event.*;
 /**
  * Abstract class AnimatedLine - write a description of the class here
  *
- * @author Ammar Malik and Kyra Griffin
+ * @author 
  * @version Spring 2021
  */
 public abstract class AnimatedShape extends Thread
 {
-   protected final int DELAY_TIME = 22;
+   protected final int DELAY_TIME = 2;
    protected boolean done;
    protected Point startPoint;
    protected JComponent container;

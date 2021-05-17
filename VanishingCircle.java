@@ -11,17 +11,18 @@ one line disapears from the screen, stopping when it reaches the
 bottom of the window.
 We'll be adding some gravity effects.
 
-@author Ammar Malik and Kyra Griffin
+@author 
 @version Spring 2021
  */
 class VanishingCircle extends AnimatedShape {
 
     private static Image circlePic;
     // the filename that will be loaded into snowPic
-    private static final String snowPicFilename = "circle.gif";
+    private static final String circlePicFilename = "circle.gif";
+
+    private static final int circlePicHeight = 200;
 
     private int R,G,B;
-
     /**
     Construct a new FallingGravityBall object.
     @param startTopCenter the initial point at which the top of the
@@ -41,10 +42,11 @@ class VanishingCircle extends AnimatedShape {
     @param g the Graphics object on which the ball should be drawn
      */
     public void paint(Graphics g) {
-        g.drawImage(circlePic, startPoint.x, startPoint.y, null);
+        if(!done){
+            g.drawImage(circlePic, startPoint.x - circlePicHeight, startPoint.y - circlePicHeight, null);
 
-        // g.setColor(new Color(R,G,B));
-        // g.drawLine(startLine.x, startLine.y, endLine.x, endLine.y);
+        }
+
     }
 
     /**
@@ -54,32 +56,18 @@ class VanishingCircle extends AnimatedShape {
     @Override
     public void run() {
 
-        try {
-            sleep(1000);
-        }
-        catch (InterruptedException e) {
-        }
         while (startPoint.y < bottom) {
 
-            try {
-                sleep(DELAY_TIME);
-            }
-            catch (InterruptedException e) {
+            if(R < 255 && G < 255 && B < 255){
+                R++;
+                G++;
+                B++;
+            }else{
+                done = true;
             }
 
-            // every 30 ms or so, we move the coordinates of the ball down
-            // by a pixel
-            // startLine.translate(0, y_Speed);
-            // endLine.translate(0, y_Speed);
-            // y_Speed++;
-
-            // if we want to see the ball move to its new position, we
-            // need to schedule a paint event on this container
             container.repaint();
         }
-
-        done = true;
-        container.repaint();
 
     }
 
@@ -90,5 +78,15 @@ class VanishingCircle extends AnimatedShape {
     public boolean done() {
 
         return done;
+    }
+
+    /**
+    Set the Image to be used by all FallingSnow objects, to be 
+    called by the main method before the GUI gets set up
+     */
+    public static void loadCirclePic() {
+
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        VanishingCircle.circlePic = toolkit.getImage(circlePicFilename);
     }
 }

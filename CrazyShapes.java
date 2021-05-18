@@ -66,7 +66,7 @@ public class CrazyShapes extends MouseAdapter implements Runnable {
         // create a JFrame in which we will build our very
         // tiny GUI, and give the window a name
         JFrame frame = new JFrame("AnimatedScribbles");
-        frame.setPreferredSize(new Dimension(1200, 1200));
+        frame.setPreferredSize(new Dimension(850, 850));
 
         // tell the JFrame that when someone closes the
         // window, the application should terminate

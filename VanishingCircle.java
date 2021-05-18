@@ -5,6 +5,12 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 /**
 The VanishingShape class is responsible for managing the life of
 one line disapears from the screen, stopping when it reaches the 
@@ -16,13 +22,18 @@ We'll be adding some gravity effects.
  */
 class VanishingCircle extends AnimatedShape {
 
-    private static Image circlePic;
+    private static Image circle;
     // the filename that will be loaded into snowPic
     private static final String circlePicFilename = "circle.gif";
 
     private static final int circlePicHeight = 200;
+    
+    private BufferedImage circlePic= (BufferedImage) circle;
 
-    private int R,G,B;
+    // private BufferedImage img = new BufferedImage(400, 400,BufferedImage.TYPE_INT_RGB) ;
+    // private Graphics2D g2 = img.createGraphics();
+
+    private int RGB;
     /**
     Construct a new FallingGravityBall object.
     @param startTopCenter the initial point at which the top of the
@@ -41,11 +52,9 @@ class VanishingCircle extends AnimatedShape {
     Draw the ball at its current location.
     @param g the Graphics object on which the ball should be drawn
      */
-    public void paint(Graphics g) {
-        if(!done){
-            g.drawImage(circlePic, startPoint.x - circlePicHeight, startPoint.y - circlePicHeight, null);
+    public void paint(Graphics g2) {
 
-        }
+        g2.drawImage(circlePic, startPoint.x - circlePicHeight, startPoint.y - circlePicHeight, null);
 
     }
 
@@ -57,18 +66,20 @@ class VanishingCircle extends AnimatedShape {
     public void run() {
 
         while (startPoint.y < bottom) {
+            for(int x = 0; x < circlePic.getWidth(); x++){
+                for(int y = 0; y < circlePic.getHeight(); y++){
+                    RGB = circlePic.getRGB(x, y);
 
-            if(R < 255 && G < 255 && B < 255){
-                R++;
-                G++;
-                B++;
-            }else{
-                done = true;
+                    if(RGB != 255){
+                        circlePic.setRGB(x, y, 255);
+                    }
+                }
+
+                container.repaint();
             }
 
-            container.repaint();
+            done = true;
         }
-
     }
 
     /**
@@ -87,6 +98,7 @@ class VanishingCircle extends AnimatedShape {
     public static void loadCirclePic() {
 
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        VanishingCircle.circlePic = toolkit.getImage(circlePicFilename);
+        VanishingCircle.circle = toolkit.getImage(circlePicFilename);
     }
+
 }

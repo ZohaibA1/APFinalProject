@@ -11,24 +11,65 @@ import java.util.Random;
 public class Dealer
 {
     // private instance var to represent the deck of cards before shuffling.
-    private ArrayList deck;
+    private ArrayList<Card> deck;
     // private instance var to represent the shuffled deck of cards
-    private Stack shuffledDeck;
-    
+    private Stack<Card> shuffledDeck;
+
     private static Random r = new Random();
     public void createDeck()
     {
+        deck = new ArrayList<Card>(52);
+        Card card;
         for(int index = 0; index < 4; index++)
         {
             for(int i = 1; i <= 13; i++)
             {
-                if(index == 0) deck.add(new Card("Hearts", i));
-                if(index == 1) deck.add(new Card("Diamonds", i));
-                if(index == 2) deck.add(new Card("Spades", i));
-                if(index == 3) deck.add(new Card("Clubs", i));
+                if(index == 0) 
+                {
+                    card = new Card("Hearts", i);
+                    card.setRank();
+                    deck.add(card);
+                }
+
+                if(index == 1) 
+                {
+                    card = new Card("Diamonds", i);
+                    card.setRank();
+                    deck.add(card);
+                }
+
+                if(index == 2) 
+                {
+                    card = new Card("Spades", i);
+                    card.setRank();
+                    deck.add(card); 
+                }
+
+                if(index == 3) 
+                {
+                    card = new Card("Clubs", i);
+                    card.setRank();
+                    deck.add(card);
+                }
             }
         }
-        
-        shuffledDeck.push(deck.remove(r.nextInt(deck.size())));
+
+        shuffledDeck = new Stack<Card>();
+        while(!deck.isEmpty())
+        {
+            shuffledDeck.push(deck.remove(r.nextInt(deck.size())));
+        }
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        for(Card card : shuffledDeck)
+        {
+            sb.append(card.toString());
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }

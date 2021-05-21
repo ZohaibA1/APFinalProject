@@ -51,6 +51,17 @@ public class Card implements Comparable
         return value;
     }
     
+    // MUTATOR METHODS
+    public void setRank()
+    {
+        if(value > 1 && value <= 10) rank = "" + value;
+        
+        else if(value == 11) rank = "Jack";
+        else if(value == 12) rank = "Queen";
+        else if(value == 13) rank = "King";
+        else if(value == 1 || value == 14) rank = "Ace";
+    }
+    
     @Override
     public int compareTo(Object obj)
     {
@@ -84,4 +95,11 @@ public class Card implements Comparable
         else return false;
     }
     
+    @Override
+    public String toString()
+    {
+        // StringBuilder sb = new StringBuilder();
+        // sb.append(
+        return "The " + getRank() + " of " + getSuit();
+    }
 }
